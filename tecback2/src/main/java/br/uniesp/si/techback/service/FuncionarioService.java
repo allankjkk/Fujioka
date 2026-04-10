@@ -15,11 +15,28 @@ public class FuncionarioService {
     private final FuncionarioRepository repository;
 
     public Funcionario salvar(Funcionario funcionario) {
-        return repository.save(funcionario);
+        try {
+            return repository.save(funcionario);
+        }catch (Exception e) {
+            throw new RuntimeException("Erro ao salvar funcionário");
+        }
+    }
+
+    public Funcionario buscarPorId(Long id) {
+        Optional<Funcionario> func = repository.findById(id);
+        if (func.isEmpty()) {
+            throw new RuntimeException("Funcionário não encontrado");
+        }else {
+            return func.get();
+        }
     }
 
     public List<Funcionario> listar() {
-        return repository.findAll();
+        try {
+            return repository.findAll();
+        }catch (Exception e) {
+            throw new RuntimeException("Erro ao listar funcionários");
+        }
     }
 
     public Funcionario atualizar(Long id, Funcionario funcionario){
@@ -37,5 +54,4 @@ public class FuncionarioService {
         }
         repository.deleteById(id);
     }
-
 }
